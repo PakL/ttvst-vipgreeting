@@ -21,6 +21,7 @@ class VIPGreeting {
 			self.settings.appendSetting('', self.i18n.__('Stop playback') + ' (' + self.i18n.__('{{count}} in queue', {count: 0}) + ')', 'button', {attrid:'vip_stop_playback_button', set: 'vipgreeting', onclick: () => {
 				self.stop()
 			} })
+			self.settings.appendSetting('vipsoundonlyonmychannel', self.i18n.__('Play only if in my channel'), 'checkbox', {default: true, set:'vipgreeting'})
 			self.settings.appendSetting('', '', 'separator', {set: 'vipgreeting'})
 
 			riot.compile('/' + __dirname.replace(/\\/g, '/') + '/res/vip.tag', () => {
@@ -32,17 +33,21 @@ class VIPGreeting {
 			})
 		})
 
+		this.channel.on('channelonline', () => {
+			self.greetedVIP = []
+		})
 		this.chat.on('chatmessage', (channel, timestamp, userobj, msg, org_msg, type) => {
 			if(userobj.user.length <= 0) return
-			if(channel.toLowerCase() == self._tool.auth.username.toLowerCase()) {
-				self.vipsettings.forEach((vip) => {
-					if(vip.user.length <= 0) return
-					if(vip.user.toLowerCase() == userobj.user.toLowerCase() && self.greetedVIP.indexOf(userobj.user.toLowerCase()) < 0) {
-						self.greetedVIP.push(userobj.user.toLowerCase())
-						self.play(vip.file, vip.volume)
-					}
-				})
+			if(!self.settings.getBoolean('vipsoundonlyonmychannel', true) || channel.toLowerCase() != self._tool.auth.username.toLowerCase()) {
+				return
 			}
+			self.vipsettings.forEach((vip) => {
+				if(vip.user.length <= 0) return
+				if(vip.user.toLowerCase() == userobj.user.toLowerCase() && self.greetedVIP.indexOf(userobj.user.toLowerCase()) < 0) {
+					self.greetedVIP.push(userobj.user.toLowerCase())
+					self.play(vip.file, vip.volume)
+				}
+			})
 		})
 	}
 
@@ -88,6 +93,10 @@ class VIPGreeting {
 
 	get chat() {
 		return this._tool.chat
+	}
+
+	get channel() {
+		return this._tool.channel
 	}
 
 	get settings() {

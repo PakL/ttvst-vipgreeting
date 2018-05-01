@@ -21,12 +21,15 @@
 		"de": "Lautstärke"
 	},
 	"Test": {
-		"de": "Test"
+		"de": "Testen"
 	},
 	"Stop playback": {
 		"de": "Wiedergabe stoppen"
 	},
 	"{{count}} in queue": {
 		"de": "{{count}} in Warteschlange"
+	},
+	"Play only if in my channel": {
+		"de": "Nur abspielen wenn in meinem Kanal"
 	}
 }
