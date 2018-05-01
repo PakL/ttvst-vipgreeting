@@ -38,7 +38,7 @@ class VIPGreeting {
 		})
 		this.chat.on('chatmessage', (channel, timestamp, userobj, msg, org_msg, type) => {
 			if(userobj.user.length <= 0) return
-			if(!self.settings.getBoolean('vipsoundonlyonmychannel', true) || channel.toLowerCase() != self._tool.auth.username.toLowerCase()) {
+			if(self.settings.getBoolean('vipsoundonlyonmychannel', true) && channel.toLowerCase() != self._tool.auth.username.toLowerCase()) {
 				return
 			}
 			self.vipsettings.forEach((vip) => {
