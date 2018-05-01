@@ -22,7 +22,7 @@
 		})
 
 		addavip() {
-			self.vips.push({ user: '', file: '' })
+			self.vips.push({ user: '', file: '', volume: 0.5 })
 			self.update()
 		}
 		savevips() {
@@ -31,8 +31,9 @@
 			vips.forEach((v) => {
 				let username = v.querySelector('.username > input')
 				let filename = v.querySelector('.filename > input')
-				if(username !== null && filename !== null) {
-					data.push({user: username.value.toLowerCase(), file: filename.value})
+				let volume = v.querySelector('.volumeslider > input')
+				if(username !== null && filename !== null && volume !== null) {
+					data.push({user: username.value.toLowerCase(), file: filename.value, volume: volume.value})
 				}
 			})
 			self.vipaddon.settings.setJSON('vipsettings', data)

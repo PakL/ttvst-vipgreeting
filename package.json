@@ -2,8 +2,5 @@
 	"name": "vipgreeting",
 	"description": "Greet your VIPs with a sound",
 	"version": "0.0.1",
-	"systems": ["win32"],
-	"dependencies": {
-		"play": "0.5.0"
-	}
+	"systems": ["win32"]
 }

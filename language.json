@@ -16,5 +16,17 @@
 	},
 	"Remove": {
 		"de": "Entfernen"
+	},
+	"Volume": {
+		"de": "Lautstärke"
+	},
+	"Test": {
+		"de": "Test"
+	},
+	"Stop playback": {
+		"de": "Wiedergabe stoppen"
+	},
+	"{{count}} in queue": {
+		"de": "{{count}} in Warteschlange"
 	}
 }
