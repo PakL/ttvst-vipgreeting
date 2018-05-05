@@ -14,6 +14,7 @@
 			</tr>
 		</tbody>
 	</table>
+	<input type="hidden" class="key" ref="key" value="{ key }">
 
 	<style>
 		vip > table {
@@ -38,6 +39,7 @@
 		this.username = this.opts.vip.user
 		this.filename = this.opts.vip.file
 		this.volume = this.opts.vip.volume
+		this.key = this.opts.vip.key
 
 		this.on('mount', () => {
 			self.refs.usernameinput.setAttribute('placeholder', self.root.parentNode._tag.vipaddon.i18n.__('User name'))
@@ -47,6 +49,13 @@
 
 			self.refs.volumelabel.innerText = self.root.parentNode._tag.vipaddon.i18n.__('Volume')
 			self.refs.testbutton.innerText = self.root.parentNode._tag.vipaddon.i18n.__('Test')
+		})
+
+		this.on('update', () => {
+			self.username = self.opts.vip.user
+			self.filename = self.opts.vip.file
+			self.volume = self.opts.vip.volume
+			self.key = self.opts.vip.key
 		})
 
 		filesearch() {
@@ -62,12 +71,13 @@
 			
 			self.change()
 		}
-		change() {
+		change(e) {
+			e.preventDefault();
 			self.root.parentNode._tag.savevips()
 		}
-		remove() {
-			let table = self.root.querySelector('table')
-			table.parentNode.removeChild(table)
+		remove(e) {
+			e.preventDefault();
+			self.refs.key.value = '-1'
 			self.root.parentNode._tag.savevips()
 		}
 		test() {

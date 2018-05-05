@@ -1,6 +1,7 @@
 {
 	"name": "vipgreeting",
 	"description": "Greet your VIPs with a sound",
-	"version": "0.0.1",
-	"systems": ["win32"]
+	"version": "0.0.2",
+	"systems": ["win32"],
+	"toolversion": "0.3.x"
 }

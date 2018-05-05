@@ -13,24 +13,27 @@ class VIPGreeting {
 		this.playingElement = null
 
 		this._tool.on('load', () => {
-			self.settings.appendSetting('', self.i18n.__('Add VIP'), 'button', { set: 'vipgreeting', setLabel: self.i18n.__('VIP Greeting'), onclick: () => {
-				if(self.vipsettingsElement !== null && self.vipsettingsElement.hasOwnProperty('_tag')) {
-					self.vipsettingsElement._tag.addavip()
-				}
-			} })
-			self.settings.appendSetting('', self.i18n.__('Stop playback') + ' (' + self.i18n.__('{{count}} in queue', {count: 0}) + ')', 'button', {attrid:'vip_stop_playback_button', set: 'vipgreeting', onclick: () => {
+			self.settings.appendSetting('', self.i18n.__('Stop playback') + ' (' + self.i18n.__('{{count}} in queue', {count: 0}) + ')', 'button', {attrid:'vip_stop_playback_button', set: 'vipgreeting', setLabel: self.i18n.__('VIP Greeting'), onclick: () => {
 				self.stop()
 			} })
 			self.settings.appendSetting('vipsoundonlyonmychannel', self.i18n.__('Play only if in my channel'), 'checkbox', {default: true, set:'vipgreeting'})
 			self.settings.appendSetting('', '', 'separator', {set: 'vipgreeting'})
 
-			riot.compile('/' + __dirname.replace(/\\/g, '/') + '/res/vip.tag', () => {
-				riot.compile('/' + __dirname.replace(/\\/g, '/') + '/res/vipsettings.tag', () => {
+			let vipScriptElement = document.createElement('script')
+			vipScriptElement.setAttribute('type', 'application/javascript')
+			vipScriptElement.setAttribute('src', '/' + __dirname.replace(/\\/g, '/') + '/res/vip.js')
+			vipScriptElement.addEventListener('load', () => {
+				let vipSettingsScriptElement = document.createElement('script')
+				vipSettingsScriptElement.setAttribute('type', 'application/javascript')
+				vipSettingsScriptElement.setAttribute('src', '/' + __dirname.replace(/\\/g, '/') + '/res/vipsettings.js')
+				vipSettingsScriptElement.addEventListener('load', () => {
 					self.vipsettingsElement = document.createElement('vipsettings')
 					document.querySelector('#settings_set_vipgreeting > fieldset').appendChild(self.vipsettingsElement)
 					riot.mount(self.vipsettingsElement, {addon: self})
 				})
+				document.querySelector('body').appendChild(vipSettingsScriptElement)
 			})
+			document.querySelector('body').appendChild(vipScriptElement)
 		})
 
 		this.channel.on('channelonline', () => {
