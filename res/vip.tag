@@ -14,7 +14,7 @@
 			</tr>
 		</tbody>
 	</table>
-	<input type="hidden" class="key" ref="key" value="{ key }">
+	<input type="hidden" class="key" ref="key" value={ key }>
 
 	<style>
 		vip > table {
@@ -34,55 +34,69 @@
 
 	<script>
 		const {BrowserWindow, dialog} = require('electron').remote
-		const self = this
-
-		this.username = this.opts.vip.user
-		this.filename = this.opts.vip.file
-		this.volume = this.opts.vip.volume
-		this.key = this.opts.vip.key
-
-		this.on('mount', () => {
-			self.refs.usernameinput.setAttribute('placeholder', self.root.parentNode._tag.vipaddon.i18n.__('User name'))
-			self.refs.filenameinput.setAttribute('placeholder', self.root.parentNode._tag.vipaddon.i18n.__('C:\\path\\to\\audio_file.mp3'))
-			self.refs.searchfilebutton.innerText = self.root.parentNode._tag.vipaddon.i18n.__('Browse')
-			self.refs.removebutton.innerText = self.root.parentNode._tag.vipaddon.i18n.__('Remove')
-
-			self.refs.volumelabel.innerText = self.root.parentNode._tag.vipaddon.i18n.__('Volume')
-			self.refs.testbutton.innerText = self.root.parentNode._tag.vipaddon.i18n.__('Test')
-		})
-
-		this.on('update', () => {
-			self.username = self.opts.vip.user
-			self.filename = self.opts.vip.file
-			self.volume = self.opts.vip.volume
-			self.key = self.opts.vip.key
-		})
-
-		filesearch() {
-			let files = dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
-				title: self.root.parentNode._tag.vipaddon.i18n.__('Select an audio file'),
-				filters: [{name: 'Audio file', extensions: ['wav', 'mp3', 'ogg', 'm4a']}],
-				properties: [ 'openFile' ]
-			})
-			if(files != null && files.hasOwnProperty('length') && files.length > 0) {
-				self.filename = files[0]
-				self.refs.filenameinput.value = files[0]
-			}
+		export default {
 			
-			self.change()
-		}
-		change(e) {
-			e.preventDefault();
-			self.root.parentNode._tag.savevips()
-		}
-		remove(e) {
-			e.preventDefault();
-			self.refs.key.value = '-1'
-			self.root.parentNode._tag.savevips()
-		}
-		test() {
-			if(!self.root.parentNode._tag.vipaddon.playing) {
-				self.root.parentNode._tag.vipaddon.play(self.refs.filenameinput.value, self.refs.volumeinput.value)
+			onBeforeMount() {
+				this.username = this.props.vip.user
+				this.filename = this.props.vip.file
+				this.volume = this.props.vip.volume
+				this.key = this.props.vip.key
+			},
+
+			onMounted() {
+				this.refs = {
+					usernameinput: this.$('[ref=usernameinput]'),
+					filenameinput: this.$('[ref=filenameinput]'),
+					searchfilebutton: this.$('[ref=searchfilebutton]'),
+					removebutton: this.$('[ref=removebutton]'),
+					volumelabel: this.$('[ref=volumelabel]'),
+					volumeinput: this.$('[ref=volumeinput]'),
+					testbutton: this.$('[ref=testbutton]'),
+					key: this.$('[ref=key]')
+				}
+
+				this.refs.usernameinput.setAttribute('placeholder', this.root.parentNode._tag.vipaddon.i18n.__('User name'))
+				this.refs.filenameinput.setAttribute('placeholder', this.root.parentNode._tag.vipaddon.i18n.__('C:\\path\\to\\audio_file.mp3'))
+				this.refs.searchfilebutton.innerText = this.root.parentNode._tag.vipaddon.i18n.__('Browse')
+				this.refs.removebutton.innerText = this.root.parentNode._tag.vipaddon.i18n.__('Remove')
+
+				this.refs.volumelabel.innerText = this.root.parentNode._tag.vipaddon.i18n.__('Volume')
+				this.refs.testbutton.innerText = this.root.parentNode._tag.vipaddon.i18n.__('Test')
+			},
+
+			onBeforeUpdate() {
+				this.username = this.props.vip.user
+				this.filename = this.props.vip.file
+				this.volume = this.props.vip.volume
+				this.key = this.props.vip.key
+			},
+
+			filesearch() {
+				let files = dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
+					title: this.root.parentNode._tag.vipaddon.i18n.__('Select an audio file'),
+					filters: [{name: 'Audio file', extensions: ['wav', 'mp3', 'ogg', 'm4a']}],
+					properties: [ 'openFile' ]
+				})
+				if(files != null && files.hasOwnProperty('length') && files.length > 0) {
+					this.filename = files[0]
+					this.refs.filenameinput.value = files[0]
+				}
+				
+				this.change()
+			},
+			change(e) {
+				e.preventDefault();
+				this.root.parentNode._tag.savevips()
+			},
+			remove(e) {
+				e.preventDefault();
+				this.refs.key.value = '-1'
+				this.root.parentNode._tag.savevips()
+			},
+			test() {
+				if(!this.root.parentNode._tag.vipaddon.playing) {
+					this.root.parentNode._tag.vipaddon.play(this.refs.filenameinput.value, this.refs.volumeinput.value)
+				}
 			}
 		}
 	</script>
