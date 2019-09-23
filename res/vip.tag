@@ -72,7 +72,7 @@
 			},
 
 			filesearch() {
-				let files = dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
+				let files = dialog.showOpenDialogSync(BrowserWindow.getFocusedWindow(), {
 					title: this.root.parentNode._tag.vipaddon.i18n.__('Select an audio file'),
 					filters: [{name: 'Audio file', extensions: ['wav', 'mp3', 'ogg', 'm4a']}],
 					properties: [ 'openFile' ]
